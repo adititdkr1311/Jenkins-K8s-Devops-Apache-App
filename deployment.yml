@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apachewebsite-deployment
+  labels:
+    app: apachewebsite
+spec:
+  replicas: 2   # number of pods
+  selector:
+    matchLabels:
+      app: apachewebsite
+  template:
+    metadata:
+      labels:
+        app: apachewebsite
+    spec:
+      containers:
+      - name: apachewebsite
+        image: adititdkr13/apachewebsite:latest
+        ports:
+        - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: apachewebsite-service
+spec:
+  selector:
+    app: apachewebsite
+  ports:
+    - protocol: TCP
+      port: 80        # Service port
+      targetPort: 80  # Container port
+      nodePort: 30080 # Optional: fixed NodePort
+  type: NodePort
